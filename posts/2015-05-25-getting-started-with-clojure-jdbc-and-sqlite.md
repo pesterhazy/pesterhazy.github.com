@@ -33,12 +33,11 @@ we're going to need a database connection:
 (require '[clojure.java.jdbc :as sql])
 ```
 
-Bla bla bla
+Now let's try a simple query:
 
 ``` clojure
+(sql/query db "select 3*5")
 
-(defn bla [xyz]
-  (* xyz 3))
+;; SQLException No suitable driver found for jdbc:sqlite:test.db
+;; java.sql.DriverManager.getConnection (DriverManager.java:689)
 ```
-
-Hallo Anke

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-directory="."
+dirs=(posts template build)
 
 ./build
 
-inotifywait --exclude out -r -m -e modify "$directory" |
+inotifywait --exclude out -r -m -e modify ${dirs[@]} |
 while read filename eventlist eventfile
 do
     echo
