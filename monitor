@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-directory="posts"
+directory="."
 
 inotifywait -m -e close_write "$directory" |
 while read filename eventlist eventfile

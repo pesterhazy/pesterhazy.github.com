@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+template="template/layout.html"
+
 compile() {
     local fn="$1"
 
-    pandoc "$fn" --standalone -o site/out.html
+    pandoc "$fn" --standalone --template "$template" -o site/out.html
 }
 
 compile "posts/2015-05-25-getting-started-with-clojure-jdbc-and-sqlite.md"
