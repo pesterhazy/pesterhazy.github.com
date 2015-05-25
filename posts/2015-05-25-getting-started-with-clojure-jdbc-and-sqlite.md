@@ -21,7 +21,18 @@ database, for the obvious reason that it does not require a lot of set
 up. However, as in Java, switching to a database server such as PostgreSQL or
 MySQL should be as simple as swapping out the JDBC connection string.
 
-Clojure's main interface to SQL databases the `java.jdbc` package. To get going,
+To approximate a typical Clojure workflow as closely as possible, this
+walkthrough is presented as the transcript of a REPL session. To follow along,
+open a REPL using `lein repl` and type each line as presented here. I'd
+encourage you to actually type out each line to get a feel for how the library
+works.
+
+Note that to follow along you don't need a `leiningen` project; a session opened
+from a directory without a `project.clj` will be sufficient. However, I am using
+the useful `vinyasa.pull/pull` function which allows you to pull in `jar` files
+with external dependencies into a running REPL.
+
+Clojure's main interface to SQL databases the `java.jdbc` package. To get started,
 we're going to need a database connection:
 
 ``` clojure
@@ -33,7 +44,7 @@ we're going to need a database connection:
 (require '[clojure.java.jdbc :as sql])
 ```
 
-Now let's try a simple query:
+Let's start by executing a simple query:
 
 ``` clojure
 (sql/query db "select 3*5 as result")
@@ -52,7 +63,7 @@ the `sqlite` JDBC driver. We need to add this dependency explicitly:
 ;; => ({:result 15})
 ```
 
-So that works. The call to `query` returns a single row with a single column,
+Ok, now it works. The call to `query` returns a single row with a single column,
 which we can extract easily:
 
 ``` clojure
@@ -95,7 +106,7 @@ arguments to the `insert!` function:
        (map (partial zipmap [:name :capital]) pairs))
 ```
 
-Now we can retrieve the rows we inserted:
+Now we can retrieve the rows we just inserted:
 
 ``` clojure
 (sql/query db "select id, name, capital from countries")
