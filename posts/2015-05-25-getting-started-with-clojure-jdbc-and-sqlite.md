@@ -36,8 +36,57 @@ we're going to need a database connection:
 Now let's try a simple query:
 
 ``` clojure
-(sql/query db "select 3*5")
+(sql/query db "select 3*5 as result")
 
 ;; SQLException No suitable driver found for jdbc:sqlite:test.db
 ;; java.sql.DriverManager.getConnection (DriverManager.java:689)
+```
+
+Apparently installing the `clojure.java/jdbc` jar does not automatically pull in
+the `sqlite` JDBC driver. We need to add this dependency explicitly:
+
+``` clojure
+(>pull 'org.xerial/sqlite-jdbc "3.7.2")
+
+(sql/query db "select 3*5 as result")
+;; => ({:result 15})
+```
+
+So that works. The call to `query` returns a single row with a single column,
+which we can extract easily:
+
+``` clojure
+(-> (sql/query db "select 3*5 as result") first :result)
+;; => 15
+```
+
+Let's create a table:
+
+``` clojure
+(sql/db-do-commands db "drop table if exists countries")
+(sql/db-do-commands db (sql/create-table-ddl :countries
+                                             [:id :integer]
+                                             [:name :text]
+                                             [:capital :text]))
+```
+
+and add some data:
+
+``` clojure
+
+(sql/insert! db :countries {:name "France",
+                            :capital "Paris"})
+```
+
+We can also insert multiple rows at the same time by passing many hash-maps as
+arguments to the `insert!` function:
+
+``` clojure
+
+(def pairs [["USA" "Washington, D.C."]
+            ["Argentina" "Buenos Aires"]
+            ["Peru" "Lima"]])
+
+(apply sql/insert! db :countries
+       (map (partial zipmap [:name :capital]) pairs))
 ```
