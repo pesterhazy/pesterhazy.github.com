@@ -7,14 +7,14 @@ tags: []
 ---
 
 Using a relational database is, perhaps, not among the most glamorous things you
-can do from a functional programming language. Working with SQL is, however,
-very useful for real-life tasks. As it turns out, it is also an area where
-Clojure can show some of its strengths. Clojure's emphasis on manipulating
-simple data structures (vectors and hash-maps) also means that working with the
-results of SQL queries is easy, in many cases obviating the need for a ORM or
-other helper library. But as a hosted language, Clojure also benefits from
-access to Java's JDBC database drivers, which essentially means that there is
-hardly any database out there that you cannot use with great performance.
+can do from a functional programming language. SQL is, however, very useful for
+all kinds of real-world tasks. As it turns out, it is also an area where Clojure
+can show its strengths. Clojure's emphasis on manipulating simple data
+structures (lists, vectors and hash-maps) also means that working with the results of
+SQL queries is easy, in many cases obviating the need for a ORM or other helper
+library. But as a hosted language, Clojure also benefits from access to Java's
+JDBC database drivers, which essentially means that there is hardly any database
+out there that you cannot use -- all it takes is an additional line of code.
 
 In this post, I will show how to work with SQLite, an embedded (in-process)
 database, for the obvious reason that it does not require a lot of set
