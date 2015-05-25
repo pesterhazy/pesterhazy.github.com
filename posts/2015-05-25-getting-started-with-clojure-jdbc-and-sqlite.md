@@ -65,7 +65,7 @@ Let's create a table:
 ``` clojure
 (sql/db-do-commands db "drop table if exists countries")
 (sql/db-do-commands db (sql/create-table-ddl :countries
-                                             [:id :integer]
+                                             [:id :integer :primary :key :autoincrement]
                                              [:name :text]
                                              [:capital :text]))
 ```
@@ -78,7 +78,7 @@ and add some data:
                             :capital "Paris"})
 ```
 
-We can also insert multiple rows at the same time by passing many hash-maps as
+We can also insert multiple rows in one go by passing many hash-maps as
 arguments to the `insert!` function:
 
 ``` clojure
@@ -89,4 +89,15 @@ arguments to the `insert!` function:
 
 (apply sql/insert! db :countries
        (map (partial zipmap [:name :capital]) pairs))
+```
+
+Now we can retrieve the rows we inserted:
+
+``` clojure
+(sql/query db "select id, name, capital from countries")
+
+;; => ({:capital "Paris", :name "France", :id 1}
+;;     {:capital "Washington, D.C.", :name "USA", :id 2}
+;;     {:capital "Buenos Aires", :name "Argentina", :id 3}
+;;     {:capital "Lima", :name "Peru", :id 4})
 ```
