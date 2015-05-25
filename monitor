@@ -2,8 +2,13 @@
 
 directory="."
 
-inotifywait -m -e close_write "$directory" |
+./build
+
+inotifywait -r -m -e close_write "$directory" |
 while read filename eventlist eventfile
 do
+    echo
+    echo Rebuilding...
     ./build
+    echo done
 done

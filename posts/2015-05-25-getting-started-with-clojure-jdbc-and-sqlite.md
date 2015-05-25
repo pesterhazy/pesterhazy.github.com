@@ -27,6 +27,11 @@ we're going to need a database connection:
 ``` clojure
 (>pull 'org.clojure/java.jdbc "0.3.7")
 
+(defn bla
+  [args]
+  "bla bla"
+  (* args args))
+
 ;; {[org.clojure/clojure "1.4.0"] nil, [org.clojure/java.jdbc "0.3.7"]
 ;; #{[org.clojure/clojure "1.4.0"]}}
 
