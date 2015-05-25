@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+directory="posts"
+
+inotifywait -m -e close_write "$directory" |
+while read filename eventlist eventfile
+do
+    ./build
+done

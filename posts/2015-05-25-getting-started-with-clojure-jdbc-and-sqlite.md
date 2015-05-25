@@ -24,22 +24,11 @@ MySQL should be as simple as swapping out the JDBC connection string.
 Clojure's main interface to SQL databases the `java.jdbc` package. To get going,
 we're going to need a database connection:
 
-
-
-``` c
-#include <stdio.h>
-
-void main() {
-}
-```
-
-bla
-
-``` clj
+``` clojure
 (>pull 'org.clojure/java.jdbc "0.3.7")
 
-;; {[org.clojure/clojure "1.4.0"] nil, [org.clojure/java.jdbc "0.3.7"] #{[org.clojure/clojure "1.4.0"]}}
+;; {[org.clojure/clojure "1.4.0"] nil, [org.clojure/java.jdbc "0.3.7"]
+;; #{[org.clojure/clojure "1.4.0"]}}
 
 (require '[clojure.java.jdbc :as sql])
-```
-
+``` 

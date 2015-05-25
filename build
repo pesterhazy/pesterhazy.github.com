@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+compile() {
+    local fn="$1"
+
+    pandoc "$fn" --standalone -o site/out.html
+}
+
+compile "posts/2015-05-25-getting-started-with-clojure-jdbc-and-sqlite.md"
+
