@@ -85,3 +85,21 @@ p {
     padding: .3em .3em;
     background: #f8f8f8;
 }
+
+.title {
+    font-size: 1.5em;
+}
+
+.blog-title {
+    font-style: italic;
+    text-align: center;
+    font-family: Times;
+}
+
+hr.blog-title-rule {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: .7em;
+}
+    
