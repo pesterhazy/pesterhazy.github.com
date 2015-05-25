@@ -3,19 +3,26 @@
 template="template/layout.html"
 
 compile() {
-    local fn="$1"
+    local in="$1"
+    local base="$(basename "$1")"
+    local out="site/${base%.md}.html"
 
-    pandoc "$fn" --standalone --template "$template" -o site/out.html
+    pandoc "$in" --standalone --template "$template" -o "$out"
+    echo "$out"
 }
 
 extract() {
-    local fn="$1"
+    local in="$1"
+    local base="$(basename "$1")"
+    local out="site/${base%.md}.clj"
     
-    pandoc --filter ./extract-codeblocks.py --to markdown "$fn" | grep -vE '^```' > site/code.clj
+    pandoc --filter ./extract-codeblocks.py --to markdown "$in" | grep -vE '^```' > "$out"
+    echo "$out"
 }
 
-f="posts/2015-05-25-getting-started-with-clojure-jdbc-and-sqlite.md"
+fs=(posts/*.md)
 
-compile "$f"
-extract "$f"
-
+for f in ${fs[@]}; do
+    compile "$f"
+    extract "$f"
+done

@@ -12,6 +12,6 @@ Stuart Sierra writes:
   of a reductive personality
 
 It's an (oblique) reference to a very common problem: how do you construct a map
-from a sequence of elements based on a unique key?
+from a sequence of elements based on a unique key? [1]
 
 This need arises frequently when you deal with `jdbc`, Java's SQL abstraction.
