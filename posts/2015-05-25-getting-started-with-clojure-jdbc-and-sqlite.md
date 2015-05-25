@@ -16,10 +16,11 @@ library. But as a hosted language, Clojure also benefits from access to Java's
 JDBC database drivers, which essentially means that there is hardly any database
 out there that you cannot use -- all it takes is an additional line of code.
 
-In this post, I will show how to work with SQLite, an embedded (in-process)
-database, for the obvious reason that it does not require a lot of set
-up. However, as in Java, switching to a database server such as PostgreSQL or
-MySQL should be as simple as swapping out the JDBC connection string.
+In this post, I will show how to work with [SQLite](https://www.sqlite.org), an
+embedded (in-process) database. I chose SQlite because it is easily available
+and does not require any set up. However, as is the case wiht JDBC, switching to
+a database server such as PostgreSQL or MySQL should be as simple as swapping
+out the connection string.
 
 To approximate a typical Clojure workflow as closely as possible, this
 walkthrough is presented as the transcript of a REPL session. To follow along,
@@ -116,3 +117,9 @@ Now we can retrieve the rows we just inserted:
 ;;     {:capital "Buenos Aires", :name "Argentina", :id 3}
 ;;     {:capital "Lima", :name "Peru", :id 4})
 ```
+
+## Further reading
+
+For more on the topic, check out the official
+[java.jdbc tutorial](http://clojure-doc.org/articles/ecosystem/java_jdbc/home.html)
+and the generated [API documentation](http://clojure.github.io/java.jdbc/).
