@@ -4,11 +4,11 @@ directory="."
 
 ./build
 
-inotifywait -r -m -e close_write "$directory" |
+inotifywait --exclude out -r -m -e modify "$directory" |
 while read filename eventlist eventfile
 do
     echo
-    echo Rebuilding...
+    printf "[%s]: Rebuilding ...\n" "$(date)"
     ./build
     echo done
 done

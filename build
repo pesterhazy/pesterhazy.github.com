@@ -8,5 +8,14 @@ compile() {
     pandoc "$fn" --standalone --template "$template" -o site/out.html
 }
 
-compile "posts/2015-05-25-getting-started-with-clojure-jdbc-and-sqlite.md"
+extract() {
+    local fn="$1"
+    
+    pandoc --filter ./extract-codeblocks.py --to markdown "$fn" | grep -vE '^```' > site/code.clj
+}
+
+f="posts/2015-05-25-getting-started-with-clojure-jdbc-and-sqlite.md"
+
+compile "$f"
+extract "$f"
 
