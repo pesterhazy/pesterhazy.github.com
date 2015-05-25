@@ -63,11 +63,15 @@ which we can extract easily:
 Let's create a table:
 
 ``` clojure
-(sql/db-do-commands db "drop table if exists countries")
-(sql/db-do-commands db (sql/create-table-ddl :countries
-                                             [:id :integer :primary :key :autoincrement]
-                                             [:name :text]
-                                             [:capital :text]))
+(sql/db-do-commands db
+                    "drop table if exists countries")
+(let [cs (sql/create-table-ddl :countries
+                               [:id :integer
+                                :primary :key
+                                :autoincrement]
+                               [:name :text]
+                               [:capital :text])]
+  (sql/db-do-commands db ))
 ```
 
 and add some data:

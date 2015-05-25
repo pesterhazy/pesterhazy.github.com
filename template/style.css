@@ -36,22 +36,52 @@ p {
     line-height: 1.5em;
 }
 
-.post pre code {
-    border: none;
-}
+/* .post pre code { */
+/*     border: none; */
+/* } */
+
+/* .post pre { */
+/*     border: 1px dashed #ccc; */
+/*     background-color: #f00000; */
+/*     padding: 0 .4em; */
+/*     margin-top: .5em; */
+/*     margin-bottom: .5em; */
+/* } */
+
+/* .post code { */
+/*     border: 1px solid #ddd; */
+/*     font-size: 80%; */
+/*     padding: 0 .2em; */
+/*     line-height: 1.2em; */
+/* } */
 
 .post pre {
-    border: 1px dashed #ccc;
-    background-color: #fff;
-    padding: 0 .4em;
-    margin-top: .5em;
-    margin-bottom: .5em;
-}
+    font-size: 90%;
+    line-height: 1.3em;
+    font-family: "Courier 10 Pitch", Courier, monospace; 
+    white-space: pre; 
+    white-space: pre-wrap; 
+    white-space: -moz-pre-wrap; 
+    white-space: -o-pre-wrap; 
 
-.post code {
-    border: 1px solid #ddd;
-    background-color: #fff;
-    font-size: 80%;
-    padding: 0 .2em;
-    line-height: 1.2em;
+    height:1%;
+    width: auto;
+    display: block;
+    clear: both;
+    color: #555555;
+    padding: 1em 1em;
+    margin: auto 10px auto 10px;
+    background: #f8f8f8;
+    border: solid 1px #e1e1e1
+} 
+
+.post code { 
+    font-size: 90%;
+    line-height: 1.3em;
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+
+    display: inline; 
+    color: #555555;
+    padding: .3em .3em;
+    background: #f8f8f8;
 }
