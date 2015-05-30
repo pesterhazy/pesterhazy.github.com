@@ -18,7 +18,7 @@ out there that you cannot use -- all it takes is an additional line of code.
 
 In this post, I will show how to work with [SQLite](https://www.sqlite.org), an
 embedded (in-process) database. I chose SQlite because it is easily available
-and does not require any set up. However, as is the case wiht JDBC, switching to
+and does not require any set up. However, as is the case with JDBC, switching to
 a database server such as PostgreSQL or MySQL should be as simple as swapping
 out the connection string.
 
@@ -37,7 +37,7 @@ Clojure's main interface to SQL databases the `java.jdbc` package. To get starte
 we're going to need a database connection:
 
 ``` clojure
-(>pull 'org.clojure/java.jdbc "0.3.7")
+(./pull 'org.clojure/java.jdbc "0.3.7")
 
 ;; {[org.clojure/clojure "1.4.0"] nil, [org.clojure/java.jdbc "0.3.7"]
 ;; #{[org.clojure/clojure "1.4.0"]}}
@@ -65,7 +65,7 @@ Apparently installing the `clojure.java/jdbc` jar does not automatically pull in
 the `sqlite` JDBC driver. We need to add this dependency explicitly:
 
 ``` clojure
-(>pull 'org.xerial/sqlite-jdbc "3.7.2")
+(./pull 'org.xerial/sqlite-jdbc "3.7.2")
 
 (sql/query db "select 3*5 as result")
 ;; => ({:result 15})
