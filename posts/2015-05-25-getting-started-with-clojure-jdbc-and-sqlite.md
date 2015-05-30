@@ -45,6 +45,13 @@ we're going to need a database connection:
 (require '[clojure.java.jdbc :as sql])
 ```
 
+We'll also need a database connection:
+
+``` clojure
+(def db {:classname   "org.sqlite.JDBC", :subprotocol "sqlite", :subname
+"test.db"})
+```
+
 Let's start by executing a simple query:
 
 ``` clojure
@@ -75,18 +82,37 @@ which we can extract easily:
 Let's create a table:
 
 ``` clojure
-(sql/db-do-commands db
-                    "drop table if exists countries")
+(sql/execute! db ["drop table if exists countries"])
 (let [cs (sql/create-table-ddl :countries
                                [:id :integer
                                 :primary :key
                                 :autoincrement]
                                [:name :text]
                                [:capital :text])]
-  (sql/db-do-commands db ))
+  (sql/execute! db [cs]))
 ```
 
-and add some data:
+You can see that we wrap the string containing the SQL statement in a
+vector. The reason is that `execute!` supports prepared statements, where the
+SQL string includes placeholders such as `?`. [^placeholders] On execution, the
+placeholders in the query will be filled on the database side with the values
+provided. This is generally more efficient than including values in the SQL
+string, as the DBMS does not need to parse the values as strings. It is also
+more secure, as it rules out the possibility of SQL injection attacks. For these
+reasons, parameterized SQL queries should be used whenever possible.
+
+That's why there's a vector in the example. `execute!` expects, as its second
+parameter, a sequence of the form `[sql-string param1 param2 ...]`. So you can
+perform an `INSERT` in this way:
+
+```clojure
+(sql/execute! db ["insert into countries (name, capital) values (?, ?)"
+                  "Denmark"
+                  "Copenhagen"])
+```
+
+However, there's a simple convenience function that takes care of creating the
+SQL statement for you:
 
 ``` clojure
 
@@ -94,7 +120,7 @@ and add some data:
                             :capital "Paris"})
 ```
 
-We can also insert multiple rows in one go by passing many hash-maps as
+We can also insert multiple rows in one go by passing multiple hash-maps as
 arguments to the `insert!` function:
 
 ``` clojure
@@ -112,14 +138,143 @@ Now we can retrieve the rows we just inserted:
 ``` clojure
 (sql/query db "select id, name, capital from countries")
 
-;; => ({:capital "Paris", :name "France", :id 1}
-;;     {:capital "Washington, D.C.", :name "USA", :id 2}
-;;     {:capital "Buenos Aires", :name "Argentina", :id 3}
-;;     {:capital "Lima", :name "Peru", :id 4})
+;; => ({:capital "Copenhagen", :name "Denmark", :id 1}
+;;     {:capital "Paris", :name "France", :id 2}
+;;     {:capital "Washington, D.C.", :name "USA", :id 3}
+;;     {:capital "Buenos Aires", :name "Argentina", :id 4}
+;;     {:capital "Lima", :name "Peru", :id 5})
 ```
 
-## Further reading
+`query` accepts a simple string as its second argument, but we can also supply a
+parameterized query:
 
-For more on the topic, check out the official
+
+```clojure
+(-> (sql/query db ["select id  from countries where name=?" "Argentina"])
+    first
+    :id)
+;; => 4
+```
+
+Back in the command line, we can now verify that *SQLite` has written the data
+to disk:
+
+``` bash
+$ sqlite3 test.db .dump
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE countries (id integer primary key autoincrement, name text, capital text);
+INSERT INTO "countries" VALUES(1,'Denmark','Copenhagen');
+INSERT INTO "countries" VALUES(2,'France','Paris');
+INSERT INTO "countries" VALUES(3,'USA','Washington, D.C.');
+INSERT INTO "countries" VALUES(4,'Argentina','Buenos Aires');
+INSERT INTO "countries" VALUES(5,'Peru','Lima');
+DELETE FROM sqlite_sequence;
+INSERT INTO "sqlite_sequence" VALUES('countries',5);
+COMMIT;
+```
+
+## Reusing database connection
+
+All functions in `clojure.java.jdbc` expect a database specification as their
+first argument. In the examples we have been passing a map containing connection
+information to these functions. This is very convenient for experimenting in the
+REPL. However, this also means that each database interaction requires
+establishing a new connection or, in the case SQLite, closing and re-opening the
+`.db3` file. While this is usually fast enough for interactive use, it is
+inefficient when used in a production system.
+
+In other words, `java.jdbc` does not try to be smart by guessing that you're
+going to need to perform multiple queries on your database connection. That's a
+feature, not a bug, as handling expensive resources such as open database
+connections should be left as an explicit job of the programmer, making the
+scope in which the resource is available obvious.
+
+In Clojure you can use a convenient macro for this:
+
+```clojure
+(sql/with-db-connection [db-handle db]
+  (sql/query db-handle ["select count(*) as count from countries"])
+  ;; do more things with the connection
+  )
+```
+
+The macro `with-db-connections` is modelled on the syntax of `let`. With `let`
+you can bind variables to a value within a certain scope:
+
+``` clojure
+(let [a 123]
+  (println a) ;; here "a" is accessible
+  )
+;; now "a" is no longer accessible
+```
+
+Similarly, the function `with-open` keeps a file open and its handle operational
+for any operations, but only within a certain scope:
+
+``` clojure
+(with-open [rdr (clojure.java.io/reader "/etc/group")]
+  (->> rdr line-seq first))
+;; => root:x:0:
+```
+
+After execution proceeds beyond the scope of the `with-open` macro, the resource
+is automatically freed (the file handle closed).
+
+The macro `with-db-connection` has the same signature. We can see verify this
+from the REPL:
+
+```
+user=> (doc sql/with-db-connection)
+-------------------------
+clojure.java.jdbc/with-db-connection
+([binding & body])
+Macro
+  Evaluates body in the context of an active connection to the database.
+  (with-db-connection [con-db db-spec]
+  ... con-db ...)
+```
+
+The macro's first argument is expected to be a "binding", which in Clojure-speak
+is a pair, i.e. a *vector* with two elements. The second element is the resource
+to be made available to the body macro. The first element is the name of the
+binding. If you use the variable "db-handle" within the scope of the macro, it
+will re-use the current database connection. Once execution moves beyond its
+confines, the connection will be cleaned up automatically. Finally, connection
+re-use can only work if you use `db-handle` instead of `db`.
+
+## Conclusion
+
+We have seen that interacting with a relational database requires very little
+bureaucracy in Clojure. Its database functions are polymorphic in that they
+accept different types of values as *database specifications*:
+
+- a map describing how to connect to the database (in the case of SQLite
+  including the file name, otherwise including a host name, user name and
+  password)
+- a binding generated by the `with-db-connection` macro
+
+But the same abstraction also allows two other types of handles as arguments:
+
+- a binding generated by the `with-db-transaction` macro, which causes the
+  queries performed using the specification to be executed in the context of a
+  database transaction (which can be rolled back or committed atomically)
+- a handle representing a connection pool, which allows a long-running
+  multithreaded program to make use of a certain number of persistent database
+  connections (not applicable for SQLite)
+
+Database specifications provide a common interface for different patterns of
+interacting with relational databases.
+
+For more on the using SQL databases in Clojure, check out the official
 [java.jdbc tutorial](http://clojure-doc.org/articles/ecosystem/java_jdbc/home.html)
 and the generated [API documentation](http://clojure.github.io/java.jdbc/).
+
+It may also be useful to have a look at the official Sun's
+[JDBC documentation](http://docs.oracle.com/javase/tutorial/jdbc/basics/index.html),
+much of which applies also to Clojure.
+
+[^placeholders]: Unfortunately you'll need to use positional (indexed)
+parameters (multiple occurrences of `?`) as JDBC
+[does not support](http://stackoverflow.com/a/2309984/239678) named parameters
+(`:name` and `:capital`) out of the box.

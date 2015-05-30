@@ -10,9 +10,10 @@ code_blocks = []
 def extract(key, value, fmt, meta):
     if (key == 'CodeBlock'):
         [[ident,classes,keyvals], code] = value
-        value = [[ident,classes,[['test_id',str(len(code_blocks))]]],code]
-        
-        code_blocks.append({'c': value, 't': 'CodeBlock'})
+
+        if "clojure" in classes:
+            value = [[ident,classes,[['test_id',str(len(code_blocks))]]],code]
+            code_blocks.append({'c': value, 't': 'CodeBlock'})
 
 if __name__ == "__main__":
     doc = json.loads(sys.stdin.read())
