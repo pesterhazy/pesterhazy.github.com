@@ -67,5 +67,10 @@ user=> (xml/indent-str (xml/sexp-as-element [:hello "world"]))
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello>world</hello>\n"
 ```
 
-You can also omit the version number, in which case `vinyasa` will pull in the
+You can even omit the version number, in which case `vinyasa` will pull in the
 latest version of the library (and helpfully tell which version it retrieved).
+
+## Further reading
+
+- [This article](http://dev.solita.fi/2014/03/18/pimp-my-repl.html) explains
+  Vinyasa and many other useful things you can do in a Clojure REPL.

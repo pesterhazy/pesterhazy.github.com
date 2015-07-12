@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Getting started with JDBC and SQLite in Clojure"
-description: ""
-category: clojure
-tags: []
 ---
 
 Using a relational database is, perhaps, not among the most glamorous things you
