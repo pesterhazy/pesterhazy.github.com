@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
-template="template/layout.html"
+set -euo pipefail
+
+site="site"
+template="template"
 
 compile() {
     local in="$1"
     local base="$(basename "$1")"
     local out="site/${base%.md}.html"
 
-    pandoc "$in" --standalone --template "$template" -o "$out"
+    pandoc "$in" --standalone --template "${template}/layout.html" -o "$out"
     echo "$out"
 }
 
@@ -19,6 +22,12 @@ extract() {
     pandoc --filter ./extract-codeblocks.py --to markdown "$in" | grep -vE '^```' > "$out"
     echo "$out"
 }
+
+common() {
+    cp "${template}/style.css" "${site}"
+}
+
+common
 
 fs=(posts/*.md)
 
