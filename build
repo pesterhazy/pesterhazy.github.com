@@ -2,32 +2,38 @@
 
 set -euo pipefail
 
+target=target
+target_posts="${target}/posts"
+target_clj="${target}/posts"
 site="site"
 template="template"
+index="${site}/index.html"
 
 compile() {
     local in="$1"
     local base="$(basename "$1")"
-    local out="site/${base%.md}.html"
+    local out="${target_posts}/${base%.md}.html"
 
-    pandoc "$in" --standalone --template "${template}/layout.html" -o "$out"
+    pandoc "$in" --standalone --template "${template}/post.html" -o "$out"
+    cat "$out" >> "$index"
     echo "$out"
 }
 
 extract() {
     local in="$1"
     local base="$(basename "$1")"
-    local out="site/${base%.md}.clj"
+    local out="${target_clj}/${base%.md}.clj"
     
     pandoc --filter ./extract-codeblocks.py --to markdown "$in" | grep -vE '^```' > "$out"
     echo "$out"
 }
 
-common() {
+prepare() {
+    cp /dev/null "$index"
     cp "${template}/style.css" "${site}"
 }
 
-common
+prepare
 
 fs=(posts/*.md)
 
