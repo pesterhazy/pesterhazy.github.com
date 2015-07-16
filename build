@@ -7,7 +7,7 @@ target_posts="${target}/posts"
 target_clj="${target}/posts"
 site="site"
 template="template"
-index="${site}/index.html"
+posts="${target}/posts.html"
 
 compile() {
     local in="$1"
@@ -15,7 +15,7 @@ compile() {
     local out="${target_posts}/${base%.md}.html"
 
     pandoc "$in" --standalone --template "${template}/post.html" -o "$out"
-    cat "$out" >> "$index"
+    cat "$out" >> "$posts"
     echo "$out"
 }
 
@@ -29,7 +29,7 @@ extract() {
 }
 
 prepare() {
-    cp /dev/null "$index"
+    cp /dev/null "$posts"
     cp "${template}/style.css" "${site}"
 }
 
@@ -41,3 +41,5 @@ for f in ${fs[@]}; do
     compile "$f"
     extract "$f"
 done
+
+nix-shell --command ./make-site

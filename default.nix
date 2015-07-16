@@ -5,6 +5,7 @@ with import <nixpkgs> {};
       name = "impurePythonEnv";
       buildInputs = [
          git
+         pystache
          libxml2
          libxslt
          libzip
