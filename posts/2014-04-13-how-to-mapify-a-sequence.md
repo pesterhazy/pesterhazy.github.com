@@ -1,5 +1,6 @@
 ---
 title:  "How to mapify a sequence"
+date: 2015-07-16
 ---
 
 In a recent [tweet](https://twitter.com/stuartsierra/status/586443785606836226),

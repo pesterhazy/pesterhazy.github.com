@@ -1,5 +1,6 @@
 ---
 title: "A powerful Clojure REPL with Vinyasa"
+date: 2015-07-16
 ---
 
 As a good member of the Lisp family, Clojure's pride is its REPL. This may seem
