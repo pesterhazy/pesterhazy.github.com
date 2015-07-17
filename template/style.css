@@ -125,6 +125,17 @@ hr.blog-title-rule {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1.2em;
+}
+
+hr.footer-rule {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: .7em;
 }
     
+.footer {
+    text-align: center;
+    line-height: 2em;
+    }
