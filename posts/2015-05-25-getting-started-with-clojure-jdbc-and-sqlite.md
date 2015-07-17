@@ -23,7 +23,7 @@ To approximate a typical Clojure workflow as closely as possible, this
 walkthrough is presented as the transcript of a REPL session. To follow along,
 open a REPL using `lein repl` and type each line as presented here. I'd
 encourage you to actually type out each line to get a feel for how the library
-works.
+works. (For an introduction to the enrichted REPL-based workflow check [this post](#A powerful Clojure REPL with Vinyasa)).
 
 Note that to follow along you don't need a `leiningen` project; a session opened
 from a directory without a `project.clj` will be sufficient. However, I am using

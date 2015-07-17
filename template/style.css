@@ -17,6 +17,12 @@ h1 {
 	  margin-bottom: .4em;
 }
 
+h1 a:visited, h1 a:link, h1 a:active
+{
+    text-decoration: none;
+    color:black;
+}
+
 h2{
 	  font: 18px/22px 'DejaVuSerifCondensed-Bold', Arial, sans-serif;letter-spacing: 0;
 	  margin-bottom: 2em;
@@ -34,6 +40,13 @@ p {
 
 .post {
     line-height: 1.5em;
+}
+
+div.post {
+    margin-bottom: 45px;
+}
+div.post:last-of-type {
+    margin-bottom: 0px;
 }
 
 /* .post pre code { */
@@ -56,35 +69,47 @@ p {
 /* } */
 
 .post pre {
-    font-size: 90%;
-    line-height: 1.3em;
-    font-family: "Courier 10 Pitch", Courier, monospace; 
-    white-space: pre; 
-    white-space: pre-wrap; 
-    white-space: -moz-pre-wrap; 
-    white-space: -o-pre-wrap; 
-
-    height:1%;
-    width: auto;
-    display: block;
-    clear: both;
-    color: #555555;
-    padding: 1em 1em;
-    margin: auto 10px auto 10px;
-    background: #f8f8f8;
-    border: solid 1px #e1e1e1
-} 
-
-.post code { 
-    font-size: 90%;
-    line-height: 1.3em;
-    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-
-    display: inline; 
-    color: #555555;
-    padding: .3em .3em;
-    background: #f8f8f8;
+  overflow: auto;
+  border: solid 1px #9AACAE;
+  font-family: courier,Georgia,Serif;
+  color: $(body.text.color);
+  background: #EFEFEF;
+  margin: 5px;
+  padding: 5px;
 }
+
+/* *** */
+
+/* .post pre { */
+/*     font-size: 90%; */
+/*     line-height: 1.3em; */
+/*     font-family: "Courier 10 Pitch", Courier, monospace;  */
+/*     white-space: pre;  */
+/*     white-space: pre-wrap;  */
+/*     white-space: -moz-pre-wrap;  */
+/*     white-space: -o-pre-wrap;  */
+
+/*     height:1%; */
+/*     width: auto; */
+/*     display: block; */
+/*     clear: both; */
+/*     color: #555555; */
+/*     padding: 1em 1em; */
+/*     margin: auto 10px auto 10px; */
+/*     background: #f8f8f8; */
+/*     border: solid 1px #e1e1e1 */
+/* }  */
+
+/* .post code {  */
+/*     font-size: 90%; */
+/*     line-height: 1.3em; */
+/*     font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; */
+
+/*     display: inline;  */
+/*     color: #555555; */
+/*     padding: .3em .3em; */
+/*     background: #f8f8f8; */
+/* } */
 
 .title {
     font-size: 1.5em;

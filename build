@@ -35,7 +35,7 @@ prepare() {
 
 prepare
 
-fs=(posts/*.md)
+fs=(posts/2*.md)
 
 for f in ${fs[@]}; do
     compile "$f"
